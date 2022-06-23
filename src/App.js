@@ -4,15 +4,24 @@ import _ from 'lodash';
 
 function App() {
   const [source, setSource] = useState('');
+  const [resultAmount, setResultAmount] = useState(1);
   const [chosen, setChosen] = useState('');
 
   const buttonOnClickHandler = (event) => {
     event.preventDefault();
-    const rows = source.split('\n');
+    const rows = source.trim().split('\n');
     console.log(rows);
 
-    const result = _.sample(rows);
-    setChosen(result);
+    const results = [];
+    for (let amount = 0; amount < resultAmount; amount ++) {
+      let result;
+      for (let randTimes = 0; randTimes < 32; randTimes++) {
+        result = _.sample(rows);
+      }
+      results.push(result);
+    }
+    console.log(results);
+    setChosen(results.join(','));
   }
 
   return (
@@ -23,6 +32,10 @@ function App() {
         <textarea className={'source-text'} value={source} onChange={(event => {
           setSource(event.target.value);
         })}/>
+
+        <input type={'number'} value={resultAmount} onChange={(event => {
+          setResultAmount(Number.parseInt(event.target.value));
+        })} style={{margin: 10}}/>
 
         <button onClick={buttonOnClickHandler}>Black</button>
       </form>
